@@ -33,4 +33,4 @@ if __name__=="__main__":
 
     count = 0
     answer = merge_sort(numbers)
-print count # Returns the number of inversions
+    print count # Returns the number of inversions
