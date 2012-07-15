@@ -11,7 +11,7 @@ sys.setrecursionlimit(2 ** 20)
 
 # Establish source of directed graph, G
 # Source file has one directed edge per line, e.g. "1 5" is one line
-source = 'SCC.txt' 
+source = "SCC.txt" 
 # Number of nodes
 n = 875714 
 
@@ -61,7 +61,7 @@ def DFS(G,i):
     finish[i] = t
     return
    
-def grab_graph():
+def get_graph():
     # Grabs graph from input file
     # Create dictionary with a key for each node
     G, G_rev = {}, {}
@@ -89,7 +89,7 @@ def most_common(lst,x):
 
 if __name__=="__main__":
     start = time.time()
-    G, G_rev = grab_graph()
+    G, G_rev = get_graph()
     print "Graph grabbed in", time.time() - start,"seconds"
 
     start = time.time()

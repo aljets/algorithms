@@ -1,8 +1,17 @@
 # Karger minimum cut algorithm
 # Returns the minimum number of cuts in a connected graph
-
 import re
 import random
+import copy
+
+# Establish source of graph
+# Input format: First column of each row represents vertex label
+# Each row tells all the vertices that the first vertex is adjacent to
+source = "edges.txt"
+
+# Number of iterations to search for lowest minimum cut
+# Note: must run (n**2)*ln(n) to reduce failure to 1/n
+n = 30
 
 def minimum_cut(graph):
     if len(graph) < 3:
@@ -25,30 +34,39 @@ def minimum_cut(graph):
     minimum_cut(graph)
     return graph
 
-if __name__=="__main__":
-    # The following takes as input a file where the first column represents a vertex label
-    # and the row tells all vertices that said vertex is adjacent to
-    j = 0
-    count_record = 40
-    while j < 100: # This number of iterations may need to be increased
-        file = open('edges.txt','r')
-        p = re.compile(r'\b\d+\b')
-        lines = file.readlines()
-        interim = [line.strip() for line in lines if p.match(line)]
-        vertices = [0]*len(interim)
-        i = 0
-        for row in interim:
-            vertices[i] = re.findall(r'\b\d+\b', row)
-            i += 1
-        file.close()
-        graph = {t[0]:t[1:] for t in vertices}
+def get_graph():
+    # Grabs graph from input file
+    # Create dictionary with key for each node
+    file = open(source)
+    graph = {}
+    for line in file:
+        list = line.split()
+        i = int(list[0])
+        graph[i] = []
+        for element in list[1:]:
+            graph[i].append(int(element))
+    file.close()
+    return graph
+
+def find_minimum_cuts():
+    # Loop n times and display information from run with minimum cuts
+    original = get_graph()
+    for j in range(0,n): #This number of iterations may need to be increased
+        graph = copy.deepcopy(original)
         minimum_cut(graph)
         count = 0
         for key, value in graph.iteritems():
             count += len(graph[key])
         count = count/2
-        if count < count_record:
-            count_record = count
-            print "Total of",count,"connections in minimum cut"
-            print graph
-        j += 1
+        if j == 0:
+            record_count = count
+            record_iteration = j
+        if count < record_count:
+            record_count = count
+            record_iteration = j
+    return record_count,record_iteration
+
+if __name__=="__main__":
+    record_count, record_iteration = find_minimum_cuts()
+    print "The minimum cut found within",n,"iterations is"
+    print record_count,"connections found at iteration",record_iteration
