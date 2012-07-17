@@ -32,7 +32,7 @@ def DFS_Loop(G): # Was DFS LOOP
     current_index = 0
     scc_index = 0
     stack = []
-    current_stack = {}
+    current_stack = set([])
     lowlink = {}
     # Explore each adjacent node i (if unexplored)
     for i in range(n,0,-1):
@@ -48,8 +48,8 @@ def DFS(G,i):
     current_index += 1
     # Push current value onto stack
     stack.append(i) 
-    # For faster search, place values of stack into hash table (dict)
-    current_stack[i] = 1 
+    # For faster search of membership, place values of stack into hash table
+    current_stack.add(i) 
     # For each arc (i,j) in G, if j is not yet explored, recurse on j
     for j in G[i]:
         # If j not visited, recurse on j
@@ -65,11 +65,11 @@ def DFS(G,i):
         # give the SCC a unique value scc_index
         while stack[-1] != i:
             SCC[stack[-1]] = scc_index
-            del current_stack[stack[-1]]
+            current_stack.remove(stack[-1])
             del stack[-1]
         if stack[-1] == i:
             SCC[stack[-1]] = scc_index
-            del current_stack[stack[-1]]
+            current_stack.remove(stack[-1])
             del stack[-1]
         scc_index += 1
     return
