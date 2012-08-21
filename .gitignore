@@ -1,0 +1,4 @@
+# Ignore unneeded files
+archive/
+*.swp
+*~
